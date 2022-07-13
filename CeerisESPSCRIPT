@@ -1,146 +1,39 @@
-local camera = workspace.CurrentCamera
-local runservice = game:GetService("RunService")
-local EyeCircle = game.Workspace.DungeonIcon.GreatEyeCircle.Glow
-local EyeSquare = game.Workspace.DungeonIcon.GreatEyeSquare.Glow
-local EyeTriangle = game.Workspace.DungeonIcon.GreatEyeTriangle.Glow
+local players = game:GetService("Players") -- Players
+local cleint = players.LocalPlayer -- Local player
+local cam = game:GetService("Workspace").CurrentCamera
 
-function esp(eyeballs)
 
-	local dropesp = Drawing.new("Text") --ESP Font
-	dropesp.Visible = false
-	dropesp.Center = true
-	dropesp.Outline = true
-	dropesp.Font = 2
-	dropesp.Color = Color3.fromRGB(255,255,255)
-	dropesp.Size = 13
+function doESP(ball)
+    local Text = Drawing.new("Text")
+    Text.Visible = false
+    Text.Size = 18
+    Text.Font = 3
+    
+    Text.Outline = true
+    function up()
+        game:GetService("RunService").RenderStepped:Connect(function(deltaTime)
+            if ball.Name == "Union" then
+                local Distance = (cam.CFrame.Position-ball.Position).Magnitude
+                local Pos,OnScreen = cam:WorldToScreenPoint(ball.Position)
 
-	local renderstepped
-	renderstepped = runservice.RenderStepped:Connect(function()
-		if eyeballs and workspace:FindFirstChild(eyeballs.Name) and eyeballs:FindFirstChild("Part") then
-			local eyeballs_pos, eyeballs_onscreen = camera:WorldToViewportPoint(eyeballs.Part.Position)
-
-			if eyeballs_onscreen then
-				dropesp.Position = Vector2.new(eyeballs_pos.X, eyeballs_pos.Y)
-				dropesp.Text = "EyeballCircle"
-				dropesp.Visible = true
-			else 
-				dropesp.Visible = false
-			end
-		else
-			dropesp.Visible = false
-			dropesp:Remove()
-			renderstepped:Disconnect()
-		end
-	end)
-
+                if OnScreen then
+                    Text.Position = Vector2.new(Pos.x,Pos.y)
+                    Text.Visible = true
+                else
+                    Text.Visible = false
+                end
+                Text.Text = tostring(ball.Name.." std"..Distance)
+            end
+        end)
+    end
+    coroutine.wrap(up)()
 end
 
-for i,eyeballs in next, workspace:GetChildren() do 
-	if eyeballs.Name == "Glow" then
-		if eyeballs:FindFirstChild("Part") then
-			esp(eyeballs)
-		end
-	end
+
+
+--doESP(give it a part)
+for _, ball in pairs(game:GetService("Workspace").EyeList:GetDescendants()) do
+    if  ball.Name == "Union" then
+        doESP(ball)
+    end
 end
-
-workspace.ChildAdded:Connect(function(eyeballs)
-	if eyeballs.Name == "Glow" then
-		if eyeballs:FindFirstChild("Part") then
-			esp(eyeballs)
-		end
-	end
-end)
-
-function esp2(eyeballs)
-
-	local dropesp = Drawing.new("Text") --ESP Font
-	dropesp.Visible = false
-	dropesp.Center = true
-	dropesp.Outline = true
-	dropesp.Font = 2
-	dropesp.Color = Color3.fromRGB(255,255,255)
-	dropesp.Size = 13
-
-	local renderstepped
-	renderstepped = runservice.RenderStepped:Connect(function()
-		if eyeballs and workspace:FindFirstChild(eyeballs.Name) and eyeballs:FindFirstChild("Part") then
-			local eyeballs_pos, eyeballs_onscreen = camera:WorldToViewportPoint(eyeballs.Part.Position)
-
-			if eyeballs_onscreen then
-				dropesp.Position = Vector2.new(eyeballs_pos.X, eyeballs_pos.Y)
-				dropesp.Text = "EyeballSquare"
-				dropesp.Visible = true
-			else 
-				dropesp.Visible = false
-			end
-		else
-			dropesp.Visible = false
-			dropesp:Remove()
-			renderstepped:Disconnect()
-		end
-	end)
-
-end
-
-for i,eyeballs in next, workspace:GetChildren() do 
-	if eyeballs.Name == "Glow" then
-		if eyeballs:FindFirstChild("Part") then
-			esp2(eyeballs)
-		end
-	end
-end
-
-workspace.ChildAdded:Connect(function(eyeballs)
-	if eyeballs.Name == "Glow" then
-		if eyeballs:FindFirstChild("Part") then
-			esp2(eyeballs)
-		end
-	end
-end)
-
-function esp3(eyeballs)
-
-	local dropesp = Drawing.new("Text") --ESP Font
-	dropesp.Visible = false
-	dropesp.Center = true
-	dropesp.Outline = true
-	dropesp.Font = 2
-	dropesp.Color = Color3.fromRGB(255,255,255)
-	dropesp.Size = 13
-
-	local renderstepped
-	renderstepped = runservice.RenderStepped:Connect(function()
-		if eyeballs and workspace:FindFirstChild(eyeballs.Name) and eyeballs:FindFirstChild("Part") then
-			local eyeballs_pos, eyeballs_onscreen = camera:WorldToViewportPoint(eyeballs.Part.Position)
-
-			if eyeballs_onscreen then
-				dropesp.Position = Vector2.new(eyeballs_pos.X, eyeballs_pos.Y)
-				dropesp.Text = "EyeballTriangle"
-				dropesp.Visible = true
-			else 
-				dropesp.Visible = false
-			end
-		else
-			dropesp.Visible = false
-			dropesp:Remove()
-			renderstepped:Disconnect()
-		end
-	end)
-
-end
-
-for i,eyeballs in next, workspace:GetChildren() do 
-	if eyeballs.Name == "Glow" then
-		if eyeballs:FindFirstChild("Part") then
-			esp3(eyeballs)
-		end
-	end
-end
-
-workspace.ChildAdded:Connect(function(eyeballs)
-	if eyeballs.Name == "Glow" then
-		if eyeballs:FindFirstChild("Part") then
-			esp3(eyeballs)
-		end
-	end
-end)
